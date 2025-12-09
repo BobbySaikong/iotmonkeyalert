@@ -27,4 +27,4 @@ def send_video(path, caption=""):
         requests.post(url, files=files, data=data)
 
 
-send_video("C:/Users/HP/Downloads/bobby2.mp4", "jahak ni")
+send_video("C:/Users/HP/Downloads/bobby2.mp4", "jahak ni heh")
