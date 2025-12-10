@@ -6,6 +6,15 @@ CHAT_ID = f"{env.CHAT_ID}"
 TOKEN = f"{env.TOKEN}"
 
 
+# def get_all_chat_id(n):
+#     url = f"https://api.telegram.org/bot{TOKEN}/get"
+#     data = {
+#         "chat_id": chat_id,
+#         "name" : name
+#     }
+#     post = requests.get(url)
+
+
 def send_message(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     data = {"chat_id": CHAT_ID, "text": text}
@@ -29,4 +38,4 @@ def send_video(path, caption=""):
         requests.post(url, files=files, data=data)
 
 
-send_video("C:/Users/HP/Downloads/bobby2.mp4", "jahak ni heh")
+send_video("C:/Users/HP/Downloads/bobby2.mp4", "jahak ni hehe")
