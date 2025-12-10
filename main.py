@@ -1,7 +1,9 @@
 import requests
 
-CHAT_ID = ""
-TOKEN = ""
+import token_chatid as env
+
+CHAT_ID = f"{env.CHAT_ID}"
+TOKEN = f"{env.TOKEN}"
 
 
 def send_message(text):
