@@ -35,7 +35,8 @@ def send_video(path, caption=""):
     with open(path, "rb") as vid:
         files = {"video": vid}
         data = {"chat_id": CHAT_ID, "caption": caption}
-        requests.post(url, files=files, data=data)
+        req = requests.post(url, files=files, data=data)
+    print(req.json)
 
 
 send_video("C:/Users/HP/Downloads/bobby2.mp4", "jahak ni hehe")
