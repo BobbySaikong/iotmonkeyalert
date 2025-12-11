@@ -39,4 +39,5 @@ def send_video(path, caption=""):
     print(req.json)
 
 
-send_video("C:/Users/HP/Downloads/bobby2.mp4", "jahak ni hehe")
+# send_video("C:/Users/HP/Downloads/bobby3.mp4", "jahak ni hehe")
+send_message("rilek bang, jangan delete saya ~_~")
