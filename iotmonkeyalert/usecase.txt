@@ -1,0 +1,64 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam usecase {
+  BackgroundColor<<core>> LightBlue
+  BackgroundColor<<admin>> LightYellow
+  BorderColor Black
+}
+
+actor "Registered User\n(Staff/Owner)" as User
+actor "Administrator" as Admin
+actor "Raspberry Pi\nDetection System" as Pi
+actor "External Services\n(Telegram / MQTT)" as External
+
+package "IoT Monkey Alarm System" {
+  usecase UC_Monitor as "Monitor Monkey Presence" <<core>>
+  usecase UC_Detect as "Run Object Detection (YOLO/MobileNet)" <<core>>
+  usecase UC_SaveFrame as "Save Annotated Snapshot" <<core>>
+  usecase UC_SendAlert as "Send Alert to User" <<core>>
+  usecase UC_TriggerDeterrent as "Activate Deterrent (Buzzer/Relay)" <<core>>
+  usecase UC_Register as "User Registration" <<admin>>
+  usecase UC_Config as "Configure Detection Threshold" <<admin>>
+  usecase UC_History as "View Detection History" <<core>>
+  usecase UC_Health as "System Health Monitoring" <<core>>
+  usecase UC_Maintenance as "Perform Maintenance / Update" <<admin>>
+  usecase UC_RemoteAccess as "Remote Access (SSH/Tailscale)" <<core>>
+}
+
+' Relationships
+User --> UC_Monitor
+User --> UC_ViewHistory : "Request history"
+User --> UC_Register
+User --> UC_Config
+
+Admin --> UC_Register
+Admin --> UC_Config
+Admin --> UC_Maintenance
+
+Pi --> UC_Detect
+Pi --> UC_SaveFrame
+Pi --> UC_SendAlert
+Pi --> UC_TriggerDeterrent
+Pi --> UC_Health
+Pi --> UC_RemoteAccess
+
+UC_Detect .> UC_SaveFrame : <<includes>>
+UC_Detect .> UC_TriggerDeterrent : <<includes>>
+UC_SaveFrame .> UC_SendAlert : <<includes>>
+
+UC_SendAlert --> External
+UC_RemoteAccess --> External
+
+' Notes
+note right of UC_TriggerDeterrent
+  Emits ultrasonic-frequency
+  sound; randomized patterns
+end note
+
+note left of UC_Health
+  CPU, RAM, Storage, Camera status
+  Periodic or on-demand checks
+end note
+
+@enduml

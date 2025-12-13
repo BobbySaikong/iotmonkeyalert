@@ -1,0 +1,33 @@
+@startuml
+|Raspberry Pi|
+start
+:Initialize camera, PIR, model, network;
+repeat
+  :Wait for PIR trigger or periodic capture;
+  if (PIR triggered?) then (yes)
+    :Capture frame;
+  else (no)
+    if (Periodic capture enabled?) then (yes)
+      :Capture frame;
+    else (no)
+      -> repeat
+    endif
+  endif
+
+  :Run object detection on frame;
+  if (Detection confidence >= threshold?) then (yes)
+    :Draw bounding boxes and labels;
+    :Save annotated snapshot;
+    fork
+      :Send alert to user (Telegram/MQTT/Email);
+    fork again
+      :Activate deterrent (buzzer/relay) for duration;
+    end fork
+    :Log detection event;
+    :Start cooldown timer (suppress repeated alerts);
+  else (no)
+    :Discard or archive frame (optional);
+  endif
+repeat while (system running)
+stop
+@enduml

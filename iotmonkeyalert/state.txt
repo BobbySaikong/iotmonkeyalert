@@ -1,0 +1,53 @@
+@startuml
+[*] --> Idle
+
+state Idle {
+  [*] --> Waiting
+  Waiting : Initialize hardware & services
+  Waiting --> Monitoring : PIR enabled / schedule started
+}
+
+state Monitoring {
+  Monitoring : Listening for PIR or timer
+  Monitoring --> Capturing : PIR triggered / timer
+  Monitoring --> Maintenance : Admin enters maintenance mode
+}
+
+state Capturing {
+  Capturing : Acquire frame from camera
+  Capturing --> Detecting : Frame captured
+  Capturing --> Error : Camera failure
+}
+
+state Detecting {
+  Detecting : Run model inference
+  Detecting --> Alerting : Detection >= threshold
+  Detecting --> Monitoring : No detection (return)
+  Detecting --> Error : Model failure
+}
+
+state Alerting {
+  Alerting : Annotate & save snapshot
+  Alerting : Send alert to user
+  Alerting : Activate deterrent
+  Alerting --> Cooldown : Start cooldown timer
+}
+
+state Cooldown {
+  Cooldown : Suppress repeated alerts for X seconds
+  Cooldown --> Monitoring : Cooldown expired
+  Cooldown --> Maintenance : Admin intervention
+}
+
+state Maintenance {
+  Maintenance : Firmware/software updates, diagnostics
+  Maintenance --> Idle : Exit maintenance
+}
+
+state Error {
+  Error : Log error, attempt recovery
+  Error --> Maintenance : If manual fix required
+  Error --> Monitoring : If recovered automatically
+}
+
+@enduml

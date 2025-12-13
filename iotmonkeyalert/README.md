@@ -1,0 +1,3 @@
+# iotMonkeyAlert
+Iot-based monkey detection and deterring system to protect student accomodation hall (specifically for universities on forest edges)
+

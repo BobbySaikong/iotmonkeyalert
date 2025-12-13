@@ -1,0 +1,28 @@
+@startuml
+actor User
+participant "PIR/Camera" as Sensor
+participant "Raspberry Pi\nDetection System" as Pi
+participant "Detection Model\n(YOLO/MobileNet)" as Model
+participant "External Service\n(Telegram/MQTT)" as External
+
+== Idle / Trigger ==
+Sensor -> Pi : PIR detects motion (or scheduled capture)
+Pi -> Sensor : Capture frame
+Pi -> Model : Send frame for inference
+Model --> Pi : Return detections (boxes, labels, scores)
+
+alt detection above threshold
+  Pi -> Pi : Annotate frame (draw boxes, label)
+  Pi -> Pi : Save annotated snapshot
+  Pi -> External : Send alert with image
+  Pi -> Pi : Activate deterrent (buzzer/relay)
+  Pi -> Pi : Log event (time, image path, confidence)
+  External --> User : Deliver alert (image + metadata)
+else no detection
+  Pi -> Pi : Discard frame or store for analysis
+end
+
+== Post-event ==
+User -> Pi : (optional) Request history / change threshold
+Pi --> User : Return logs or confirm config change
+@enduml
