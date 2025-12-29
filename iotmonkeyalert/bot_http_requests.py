@@ -4,9 +4,8 @@ from pprint import pprint
 
 import requests
 import telepot as tpot
-from telepot.loop import MessageLoop
-
 import token_chatid as env
+from telepot.loop import MessageLoop
 
 CHAT_ID = f"{env.CHAT_ID}"
 TOKEN = f"{env.TOKEN}"
@@ -23,8 +22,7 @@ print(bot.getUpdates())
 #     data = {
 #         "chat_id": chat_id,
 #         "name" : name
-#     }
-#     post = requests.get(url)
+#     }#     post = requests.get(url)
 
 
 def handle(incoming_message):
